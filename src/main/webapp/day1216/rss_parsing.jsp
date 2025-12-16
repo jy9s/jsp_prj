@@ -56,7 +56,7 @@ function requestRss(url, title){
 				output+="<h2>"+title+"</h2>";
 				
 				var itemNodes = $(xmlDoc).find("item");
-				output+= "기사 : <strong>" + itemNodes.length + "</strong>건";	
+				output+= "조회 기사 : <strong>" + itemNodes.length + "</strong>건";	
 				
 				var description="";
 				$.each(itemNodes,function(ind,itemNode){
