@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<depts>
+
+<dept>
+<deptno>10</deptno>
+<dname>개발부</dname>
+</dept>
+
+<dept>
+<deptno>20</deptno>
+<dname>유지부</dname>
+</dept>
+
+
+</depts>
