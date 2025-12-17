@@ -21,7 +21,7 @@ public class SiteProperty {
 		
 		try {
 			con=db.getConn();
-			String selectSiteInfo="select PROTOCOL, SERVER_NAME, CONTEXT_ROOT, MANAGE_PATH, KEY, TITLE from site_property";
+			String selectSiteInfo="select PROTOCOL, SERVER_NAME, CONTEXT_ROOT, MANAGE_PATH, KEY, TITLE from site_property where property_type = 1 ";
 			
 			pstmt=con.prepareStatement(selectSiteInfo);
 			rs=pstmt.executeQuery();

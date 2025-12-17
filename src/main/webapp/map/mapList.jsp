@@ -1,4 +1,7 @@
 <%--page directive --%>
+<%@page import="kr.co.sist.map.RestaurantDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.co.sist.map.RestaurantService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../fragments/siteProperty.jsp" %>
@@ -36,11 +39,52 @@ $(function(){
 
 }); //ready
 
+function viewRestaurant(lat, lng){
+	setCenter(lat, lng);
+	panTo(lat, lng);
+	setMarker(lat, lng);
+}
+
+function setCenter(lat, lng) {            
+    // 이동할 위도 경도 위치를 생성합니다 
+    var moveLatLon = new kakao.maps.LatLng(lat, lng);
+    
+    // 지도 중심을 이동 시킵니다
+    map.setCenter(moveLatLon);
+}
+
+function panTo(lat, lng) {
+    // 이동할 위도 경도 위치를 생성합니다 
+    var moveLatLon = new kakao.maps.LatLng(lat, lng);
+    
+    // 지도 중심을 부드럽게 이동시킵니다
+    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    map.panTo(moveLatLon);            
+}        
+
+function setMarker(lat, lng){
+	//마커가 표시될 위치입니다 
+	markerPosition  = new kakao.maps.LatLng(lat, lng); 
+
+	// 마커를 생성합니다
+	marker = new kakao.maps.Marker({
+	    position: markerPosition
+	});
+
+	// 마커가 지도 위에 표시되도록 설정합니다
+	marker.setMap(map);
+
+}
+
+
 </script>
 
 <!-- 다음 지도 API -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9e511e5a4ce493acf706705696db1a15"></script>
 <script>
+var map
+var markerPosition 
+var marker
 window.onload=function(){
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
@@ -48,10 +92,9 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         level: 3 // 지도의 확대 레벨
     };
 
-var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-// 마커가 표시될 위치입니다 
-var markerPosition  = new kakao.maps.LatLng(37.50474875092937, 127.05313852198591); 
+
 
 // 마커를 생성합니다
 var marker = new kakao.maps.Marker({
@@ -90,6 +133,38 @@ marker.setMap(map);
 				<div>
 				<h2>식당 리스트</h2>
 				<div id="map" style="width:100%; height:400px"></div>
+					
+				
+				<div>
+				<%
+				RestaurantService rs = RestaurantService.getInstance();
+				String id = (String)session.getAttribute("userId");
+				List<RestaurantDTO> list = rs.searchRestaurant(id);
+				pageContext.setAttribute("restList", list);
+				%>
+				<table>
+					<thead>
+						<tr>
+						<th>번호</th>
+						<th>식당명</th>
+						<th>주메뉴</th>
+						<th>입력일</th>
+						<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="rDTO" items="${restList}" varStatus="i">
+						<tr>
+						<td><c:out value="${i.count }"/></td>
+						<td><c:out value="${rDTO.rest_name }"/></td>
+						<td><c:out value="${rDTO.menu }"/></td>
+						<td><c:out value="${rDTO.input_date }"/></td>
+						<td><input type="button" value="보기" class="btn btn-info btn-sm" onclick="viewRestaurant(${rDTO.lat}, ${rDTO.lng})"/></td>
+						</tr>
+						</c:forEach>				
+					</tbody>				
+				</table>				
+				</div>										
 					
 				</div>
 			</div>
