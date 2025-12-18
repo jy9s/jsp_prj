@@ -88,11 +88,11 @@ public class RestaurantDAO {
 		//3. DataSource에서 Connection 얻기
 			con=dbCon.getConn();
 		//4. 쿼리문 생성객체 얻기
-			String insertMenu="insert into restaurant(rest_num, id, rest_name, menu, info, lat, lng ) "
+			String insertRestaurant="insert into restaurant(rest_num, id, rest_name, menu, info, lat, lng ) "
 					+ "values (seq_rest.nextval , ? ,? ,? , ? , ? , ? ) ";
 			
 		//5. 바인드 변수 값 설정
-			pstmt=con.prepareStatement(insertMenu);
+			pstmt=con.prepareStatement(insertRestaurant);
 			pstmt.setString(1, rDTO.getId());
 			pstmt.setString(2, rDTO.getRest_name());
 			pstmt.setString(3, rDTO.getMenu());
